@@ -7,7 +7,7 @@ class AppRoute {
 
   static getApplicationRoute() {
     return {
-      calcRoute: (context) => Calculator(),
+      calcRoute: (context) => CalculatorView(),
     };
   }
 }

@@ -1,8 +1,14 @@
 
-import 'package:calculator/app/app.dart';
+import 'package:calculator/views/calculator_view.dart';
 import 'package:flutter/material.dart';
 
 
+
 void main() {
-  runApp(const App());
+  runApp(
+    const MaterialApp(
+      home: CalculatorView(),
+      debugShowCheckedModeBanner: false,
+    ),
+  );
 }

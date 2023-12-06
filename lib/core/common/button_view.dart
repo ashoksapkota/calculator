@@ -18,11 +18,12 @@ class ButtonsView extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(10.0),
       child: Card(
-        color: Colors.grey[200],
+        color: Colors.amber[300],
         child: Center(
           child: Text(
             buttonText,
             style: const TextStyle(
+              fontFamily: 'OpenSans Bold',
               fontSize: 30,
               fontWeight: FontWeight.bold,
               color: Colors.black,

@@ -1,16 +1,17 @@
-import 'package:calculator/app/common/button_view.dart';
+import 'package:calculator/core/common/button_view.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
-class Calculator extends StatefulWidget {
-  const Calculator({super.key});
+class CalculatorView extends StatefulWidget {
+  const CalculatorView({super.key});
 
   @override
-  State<Calculator> createState() => _CalculatorViewState();
+  State<CalculatorView> createState() => _CalculatorViewState();
 }
 
-class _CalculatorViewState extends State<Calculator> {
+class _CalculatorViewState extends State<CalculatorView> {
   var userQuestion = '';
   var result = '';
 
@@ -26,8 +27,7 @@ class _CalculatorViewState extends State<Calculator> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calculator App'),
-        automaticallyImplyLeading: false,
+        title: Text('Calculator', style: GoogleFonts.getFont('Bungee Spice')),
       ),
       body: Column(
         children: [
@@ -38,7 +38,7 @@ class _CalculatorViewState extends State<Calculator> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.grey.shade400,
+                    color: Colors.amber.shade400,
                     width: 2.0,
                   ),
                 ),
@@ -120,13 +120,22 @@ class _CalculatorViewState extends State<Calculator> {
                     },
                   );
                 }
+                // percentage button
+                else if (index == buttons.indexOf('%')) {
+                  return ButtonsView(
+                    buttonText: buttons[index],
+                    buttonTapped: () {
+                      setState(() {});
+                      return handlePercentage();
+                    },
+                  );
+                }
                 // number or decimal point button
                 else if (index >= 4 && index <= 18) {
                   return ButtonsView(
                     buttonText: buttons[index],
                     buttonTapped: () {
                       setState(() {
-                        // If the result is not empty, clear both userQuestion and result
                         if (result.isNotEmpty) {
                           userQuestion = '';
                           result = '';
@@ -163,6 +172,31 @@ class _CalculatorViewState extends State<Calculator> {
       return evaluation.toString();
     } catch (e) {
       return "Error";
+    }
+  }
+
+  void handlePercentage() {
+    try {
+      if (userQuestion.isNotEmpty && !userQuestion.endsWith('%')) {
+        // If '%' is not already present, append it to the user's input
+        userQuestion += '%';
+        setState(() {
+          result = userQuestion;
+        });
+      } else if (userQuestion.contains('%')) {
+        // If '%' is already present, replace '%' with '* 0.01' and evaluate
+        var modifiedExpression = userQuestion.replaceAll('%', '*0.01');
+        var exp = Parser().parse(modifiedExpression);
+        var evaluation = exp.evaluate(EvaluationType.REAL, ContextModel());
+
+        setState(() {
+          result = evaluation.toString();
+        });
+      }
+    } catch (e) {
+      setState(() {
+        result = "Error";
+      });
     }
   }
 }
